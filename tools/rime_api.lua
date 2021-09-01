@@ -87,8 +87,8 @@ end
 --  filter tools
 function M.load_reversedb(dict_name)
   -- loaded  ReverseDb
-  local reverse_filename = "build/"  ..  dict_name .. ".reverse.bin"
-  local reversedb= ReverseDb( reverse_filename )
+  local reversedb= ReverseDb(
+    "build/" .. (dict_name or "" ) .. ".reverse.bin" )
   if not reversedb then
     log.warning( env.name_space .. ": can't load  Reversedb : " .. reverse_filename )
   end
@@ -97,7 +97,8 @@ end
 
 -- clone ConfigList of string to List
 
-function M.clone_configlist(config,path) if not config:is_list(path) then
+function M.clone_configlist(config,path)
+  if not config:is_list(path) then
     log.warning( "clone_configlist: ( " .. path  ..  " ) was not a ConfigList " )
     return nil
   end
@@ -111,9 +112,10 @@ end
 -- List write to Config
 function M.write_configlist(config,path,list)
   list:each_with_index(
-  function(config_string,i)
-    config:set_string( path .. "/@" .. i-1 , config_string)
-  end )
+    function(config_string,i)
+      config:set_string( path .. "/@" .. i-1 , config_string)
+    end
+  )
   return #list
 end
 
@@ -121,11 +123,16 @@ end
 function M.old_load_projection(config,path)
   local patterns=clone_configlist(config,path)
   local make_pattern=require 'tools/pattern'
-  local projection = patterns:map(function(pattern) return make_pattern(pattorn) end )
+  local projection = clone_configlist(config,path)
+    :map(
+      function(pattern)
+        return make_pattern(pattorn)
+      end
+        )
   -- signtone
   function projection:apply(str)
     return self:reduce(
-    function(pattern_func,org) return pattern_func(org) end , str )
+      function(pattern_func,org) return pattern_func(org) end , str )
   end
   return projection
 end
@@ -136,15 +143,15 @@ function M.load_projection( config, path)
   if not chk_newver() then
     return M.old_projection(config,path)
   end
-
+  local projection=Projection()
   local patterns= config:get_list( path )
-  local projection= Projection()
   if  patterns then
-    projection:load(patterns)
+    projection:load( patterns )
   else
-    log.warning( "lua_filter: " .. path  ..
-      " projection of comment_format could not loaded. comment_format type: " ..
-      tostring(patterns) )
+    log.warning(
+      "lua_filter: " .. path
+      .. " projection of comment_format could not loaded. comment_format type: "
+      .. tostring(patterns) )
   end
   return projection
 end
