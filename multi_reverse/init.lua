@@ -8,7 +8,7 @@
 local List=require'tools/list'
 require 'tools/rime_api'
 local MultiSwitch=require'multi_reverse/multiswitch'
-_G["_schema"]={}
+_schema = schema or  {} 
 
 local Multi_reverse='multi_reverse'
 local Completion="completion"
@@ -43,12 +43,12 @@ function M.init(env)
 
   -- backup _schema[ schemd_id].filters of ConfigList of "engine/filters"
   local schema_id= env.engine.schema.schema_id
-  _schema[ schema_id ] = _schema[schema_id] or {}
-  _schema[schema_id].filters=
-    _schema[schema_id].filters or
-    rime_api.clone_configlist(config,"engine/filters")
+  env.schema_id= schema_id
+  rime_api.backup_engine(env) 
 
-  -- chcek filter module
+  -- add filter and chcek filter module
+  _G[Completion .. "_filter"] = require'multi_reverse/completion'
+  _G[Multi_reverse .. "_filter"]=require'multi_reverse/mfilter'
   assert( _G[Multi_reverse .. "_filter"], Multi_reverse .. "_filter" .. " table not appear in global." )
   assert( _G[Completion .. "_filter"],  Completion .. "_filter" .. " table not appear in global." )
   -- add completion multi_reverse filter to "engine/filters"
@@ -80,9 +80,10 @@ function M.init(env)
 end
 
 function M.fini(env)
-  local g_backup= _schema[env.engine.schema.schema_id].filters
-  if g_backup and type(g_backup) == table then
-    write_configlist(env.schema.config,"engine/filters",g_backup)
+  local g_backup= _schema[env.engine.schema.schema_id]
+  print("-----------", env.schema_id , env.engine.schema.schema_id ) 
+  if g_backup and type(g_backup) == "table" then
+    rime_api.write_configlist(env.engine.schema.config,"engine/filters",g_backup.filters)
   end
 end
 
@@ -91,10 +92,5 @@ function M.func(keyevent,env)
   return   env.keybind_tab:action(keyevent,env)
 end
 
--- add module
-_G[Completion .. "_filter"] = require'multi_reverse/completion'
-_G[Multi_reverse .. "_filter"]=require'multi_reverse/mfilter'
-_G[Multi_reverse .. "_processor"] = M
-assert( multi_reverse_processor and multi_reverse_filter and completion_filter, Multi_reverse .. "module require failed." )
 
-return multi_reverse_processor and multi_reverse_filter and completion_filter
+return M 
