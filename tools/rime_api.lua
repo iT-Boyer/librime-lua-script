@@ -156,4 +156,30 @@ function M.load_projection( config, path)
   return projection
 end
 
+
+function M.backup_engine(env,over_write)
+  over_write = overrite or false
+  local config = env.engine.schema.config
+  local schema_id = env.engine.schema.schema_id
+  if overwrite or not _schema[schema_id] then
+    _schema[schema_id]=
+      List("segmentors","translators","filters"):reduce(
+        function(elm,org)
+          org[elm]= M.clone_configlist(config,"engine/" .. elm  )
+          return org
+        end, {} )
+  end
+  return _schema[schema_id]
+end
+
+function M.restore_engine(env)
+  local config = env.engine.schema.config
+  local schema_id= env.engine.schema.schema_id
+  if not _schema[schema_id] then return  end
+  List("segmentors","translators","filters"):each(
+        function(elm)
+          M.write_configlist(config,"engine/" .. elm,_schema[schema_id][elm]  )
+        end )
+
+end
 return M
