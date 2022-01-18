@@ -3,10 +3,17 @@
 # patch: 
 #   __include: processor_plugin:/patch
 #
+# 可自行 remark 不要用的模組
+# select_character 以詞定字
+# command   命令模式
+# english   英打
+# conjunctive 聯想模式
+# multi_reverse 主副字典反查模組
 #--------------------------------
 patch:
   engine/processors/@after 0: lua_processor@init_processor@module1
   module1/modules:
+    #  以詞定字  name_space: 可指定其他有 dictionary 反查 單字字根 (ex: cangjin5/dictionary)
     - { module: 'component/select_character', module_name: "select_character", name_space: "translator" }
     - { module: 'command', module_name: "cammand_proc", name_space: "command" }
     - { module: 'english', module_name: "english_proc", name_space: "english" }
