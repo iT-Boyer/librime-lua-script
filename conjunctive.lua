@@ -52,7 +52,7 @@ local dict_file = 'essay.txt'
 local dict_file_cn = 'essay-zh-hans.txt'
 
 --dict_file= '/usr/share/rime-data/essay.txt'  -- debug
-local switch_key ="F11"
+local switch_key ="<f6>"
 local escape_key = "%.%-"
 local path_ch= package.config:sub(1,1)
 
