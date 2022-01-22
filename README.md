@@ -7,8 +7,8 @@
   * 命令模組: 此模組可以在輸入模式 set & get option property config 及執行function
   * 載入程序: 以上模組都可以獨立手動載入也可以利用, init_processor.lua 把需要載入模組設定於 <name_space>/modules: {list}. 預設以此模式[安裝](#安裝)。
 
-  # 安裝
-  ## 事前準備
+# 安裝
+## 事前準備
   ```bash
   cd  <user-data-dir>
   git clone https://github.com/shewer/librime-lua-script --depth=1
@@ -17,7 +17,7 @@
   cp lua/example/essay-zh-hans.txt .
   ```
 
-  ## 設定方法一 : 使用 yaml 設置
+## 設定方法一 : 使用 yaml 設置
   
   append init_processor module in rime.lua 
     
@@ -56,7 +56,7 @@
 
   ```
 
- ## 設定方法二: 由 rime.lua module2 載入
+## 設定方法二: 由 rime.lua module2 載入
     
    append init_processor module in rime.lua
     
@@ -89,7 +89,7 @@
   可用模組 english(包含wordninja) conjunctive command
   化簡繁複 custom.yaml rime.lua 編輯
   
-  ## 以词定字
+## 以词定字
  此模組 可以將詞組拆選井反查單字字根 ，用于单字不会拆时~~
   ![Alt Text](https://github.com/shewer/librime-lua-script/blob/main/example/%E4%BB%A5%E8%A9%9E%E5%AE%9A%E5%AD%97.gif)
 
@@ -104,7 +104,7 @@
      * 可以利用 name_space 選用其他反查字典及 preedit_format
      * <name_space>/next_key  NEXT_KEY  : 觸發鍵   預設: '['
      * <name_space>/prev_key  PREV_KEY  : 觸發鍵   預設: ']'
-###獨立安裝
+### 獨立安裝
 
 ```lua
 --rime.lua
@@ -123,7 +123,7 @@ patch:
 ```
 
 
-  ## command 命令模組 顯示 設定 執行 命令 支援 Tab 補齊功能
+## command 命令模組 顯示 設定 執行 命令 支援 Tab 補齊功能
    可擴充 config func 設定 達到線上重載功能，後續再增加
 
     * /<opcf>:<name>:<value>  o: option p:property c:config f:funcs
@@ -143,7 +143,7 @@ patch:
   ![Alt Text](https://github.com/shewer/librime-lua-script/blob/main/example/%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8Fdemo.gif)
 
 
-  ## english 英文字典模組 支援 Tab 補齊功能 及 wordninja
+## english 英文字典模組 支援 Tab 補齊功能 及 wordninja
     * **注意** win10部份單字的comment 會造成崩潰，需要remark單字，linux 無此問題可以把 tools/english_tw.txt 內文
       "#" 移除
     * 英打模式 F10
